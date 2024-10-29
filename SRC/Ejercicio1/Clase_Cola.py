@@ -12,7 +12,7 @@ from typing import TypeVar
 T = TypeVar('T')
 
 
-class ColaEnteros(Encolable):
+class Cola(Encolable):
 
     def __init__(self):
         self.__inicio = None
