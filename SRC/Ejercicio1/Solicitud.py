@@ -1,16 +1,16 @@
-# Programa: Tienda.py
+# Programa: Solicitud.py
 # Objetivo: Clase que modela una tienda.
 # Autores: Milena Rivera, Carlos Barrera, Isaac Garrido, Mayela Rosas
 # Version: 28-10-2024
 
 
-class Tienda:
+class Solicitud:
     """
-    Clase que modela un objeto Tienda, que podra hacer un pedido.
+    Clase que modela un objeto Solicitud.
     """
     def __init__(self, rfc: str, nombre_tienda: str, cantidad_solicitada: int, nombre_consola: str):
         """
-        Constructor del objeto tienda que tiene
+        Constructor del objeto solicitud que tiene
         RFC, nombre, la cantidad solicitada de consolas de videojuegos y el nombre de la consola.
         :param rfc - RFC de latienda
         :param nombre_tienda -  nombre de la tienda
