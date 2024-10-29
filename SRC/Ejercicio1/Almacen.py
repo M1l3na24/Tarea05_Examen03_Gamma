@@ -1,7 +1,7 @@
 # Programa: Almacen.py
-# Objetivo: Clase que modela una consola de videojuegos.
+# Objetivo: Clase que modela un objeto del tipo Almacen.
 # Autores: Milena Rivera, Carlos Barrera, Isaac Garrido, Mayela Rosas
-# Version: 28-10-2024
+# Version: 29-10-2024
 
 import Clase_Cola as cC
 import Clase_Pila as cP
@@ -76,9 +76,10 @@ class Almacen:
         return ("\nBanda magnetica: \n" + self.__banda_magnetica.__str__() +
                 "\nSolicitudes: \n" + self.__solicitudes.__str__())
 
+    # Metodos extra para el ejercicio
     def leer_archivo_consolas(self, archivo: str):
         """
-        Metodo para leer un archivo y construir banda magnetica.
+        Metodo para leer un archivo y construir una banda magnetica.
         :param archivo: El nombre del archivo que se va a leer
         :return: Una Cola (Banda magnetica)
         """
@@ -202,6 +203,10 @@ class Almacen:
         return aux
 
     def registrar_solicitud(self, solicitud):
+        """
+        Metodo para registrar un nueva solicitud y simular la venta de consolas.
+        :param solicitud: Objeto del tipo Solicitud
+        """
         # Verificar existencias en la cola
         existencias = self.consulta_existencias(nombre=solicitud.nombre_consola)
         if existencias >= solicitud.cantidad_solicitada:  # tengo suficientes
@@ -236,7 +241,7 @@ class Almacen:
             print(f"Venta realizada para {solicitud.nombre_tienda}:")
             print(f"RFC {solicitud.rfc}")
             print(f"Consola: {solicitud.nombre_consola}, Cantidad: {solicitud.cantidad_solicitada}, "
-                  f"Total a pagar: {precio_total}")
+                  f"Total a pagar: $ {precio_total}")
 
             # Apilar solicitud solo si hay existencias
             self.solicitudes.push(solicitud)
