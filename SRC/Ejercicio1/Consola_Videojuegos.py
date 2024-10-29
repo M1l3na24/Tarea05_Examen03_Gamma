@@ -107,5 +107,5 @@ class Consolavideojuegos:
         :rtype: str
         """
         return ("Consola: {} | Nombre: {} | "
-                "Empresa Fabricante: {} | Precio: {}").format(self.__codigo, self.__nombre, self.__fabricante,
-                                                              self.__precio)
+                "Empresa Fabricante: {} | Precio: ${}").format(self.__codigo, self.__nombre, self.__fabricante,
+                                                               self.__precio)

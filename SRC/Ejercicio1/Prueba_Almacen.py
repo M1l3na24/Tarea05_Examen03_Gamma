@@ -1,7 +1,7 @@
 # Programa: Prueba_Almacen.py
 # Objetivo: Interfaz del ejercicio 1
 # Autores: Milena Rivera, Carlos Barrera, Isaac Garrido, Mayela Rosas
-# Version: 28-10-2024
+# Version: 29-10-2024
 
 import Almacen as Al
 import Solicitud as So

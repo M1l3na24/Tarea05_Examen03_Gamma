@@ -1,5 +1,5 @@
 # Programa: Solicitud.py
-# Objetivo: Clase que modela una tienda.
+# Objetivo: Clase que modela una tienda/solicitud.
 # Autores: Milena Rivera, Carlos Barrera, Isaac Garrido, Mayela Rosas
 # Version: 28-10-2024
 
