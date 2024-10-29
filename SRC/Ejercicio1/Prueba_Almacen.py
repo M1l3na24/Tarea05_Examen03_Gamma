@@ -24,12 +24,15 @@ def crear_consola() -> cV.Consolavideojuegos:
         # Creamos la consola segun su nombre
         if nombre == 'XboxSeriesX':
             consola = xX.XboxSerieX(codigo, emp_fabricante, precio)
+            print(f'{consola} almacenada correctamente. \n')
             return consola
         elif nombre == 'XboxSeriesS':
             consola = xS.XboxSerieS(codigo, emp_fabricante, precio)
+            print(f'{consola} almacenada correctamente. \n')
             return consola
         elif nombre == 'PlayStation5':
             consola = p5.PlayStation5(codigo, emp_fabricante, precio)
+            print(f'{consola} almacenada correctamente. \n')
             return consola
         else:
             raise ValueError('Los datos no son validos.')
@@ -108,7 +111,10 @@ while True:
                     codigo = input('Ingresa el codigo a consultar:')
                     existencias = almacen.consulta_existencias(codigo=int(codigo))
                 elif respuesta == '2':
-                    nombre = input('Ingresa el nombre a consultar:')
+                    nombre = input('Ingresa el nombre a consultar (XboxSeriesS, XboxSeriesX, PlayStation5):')
+                    if nombre not in ['XboxSeriesS', 'XboxSeriesX', 'PlayStation5']:
+                        print('El nombre no es valido \n')
+                        continue
                     existencias = almacen.consulta_existencias(nombre=nombre)
                 elif respuesta == '3':
                     empresa = input('Ingresa la empresa a consultar:')
@@ -120,8 +126,12 @@ while True:
                 print("Debes crear primero un almacen!\n")
                 continue
             else:
-                consola = crear_consola()
-                almacen.banda_magnetica.encolar(consola)
+                try:
+                    consola = crear_consola()
+                    almacen.banda_magnetica.encolar(consola)
+                except ValueError:
+                    print('Los datos ingresados no son validos \n')
+                    continue
 
         case "4":   # Registrar una nueva solicitud de compra
             if almacen is None:

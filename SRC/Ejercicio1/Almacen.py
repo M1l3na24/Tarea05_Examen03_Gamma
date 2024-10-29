@@ -186,7 +186,7 @@ class Almacen:
         aux = 0
         for consola in self.banda_magnetica:
             if ((codigo and consola.codigo == codigo) or (nombre and consola.nombre == nombre) or (
-                    empresa_fabricante and consola.empresa_fabricante == empresa_fabricante)):
+                    empresa_fabricante and consola.emp_fabricante == empresa_fabricante)):
                 aux += 1
         print(f"Existencias encontradas: {aux}")
         return aux

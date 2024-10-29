@@ -11,7 +11,7 @@ class XboxSerieX(cV.Consolavideojuegos):
     Clase de un objeto del tipo Xbox Series X que hereda de una consola
     de videojuegos.
     """
-    def __init__(self, codigo: int, emp_fabricante: str, precio: int, nombre='Xbox Series X'):
+    def __init__(self, codigo: int, emp_fabricante: str, precio: int, nombre='XboxSeriesX'):
         """
         Constructor de un objeto Consola de videojuegos del tipo XboxSerieX
                 :param codigo - codigo del XboxSerieX

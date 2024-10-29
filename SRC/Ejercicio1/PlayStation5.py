@@ -11,7 +11,7 @@ class PlayStation5(cV.Consolavideojuegos):
     Clase de un objeto del tipo Play Station 5 que hereda de una consola
     de videojuegos.
     """
-    def __init__(self, codigo: int, emp_fabricante: str, precio: int, nombre='Play Station 5'):
+    def __init__(self, codigo: int, emp_fabricante: str, precio: int, nombre='PlayStation5'):
         """
         Constructor de un objeto Consola de videojuegos del tipo PlayStation5
                 :param codigo - codigo de la PlayStation5
