@@ -8,8 +8,8 @@ import Clase_Pila as cP
 import csv
 import XboxSerieS as xS
 import XboxSerieX as xX
-import PlayStation5 as p5
-import Solicitud as s
+import PlayStation5 as pS
+import Solicitud as So
 
 
 class Almacen:
@@ -98,7 +98,7 @@ class Almacen:
                                                                        fila[2],  # emp_fabricante
                                                                        int(fila[3])))  # precio
                         elif fila[1] == "PlayStation5":
-                            self.banda_magnetica.encolar(p5.PlayStation5(int(fila[0]),  # codigo
+                            self.banda_magnetica.encolar(pS.PlayStation5(int(fila[0]),  # codigo
                                                                          fila[2],  # emp_fabricante
                                                                          int(fila[3])))  # precio
                     existe = True
@@ -123,7 +123,7 @@ class Almacen:
                     lector = csv.reader(file)
                     lector.__next__()  # Salta la primera linea
                     for fila in lector:
-                        self.solicitudes.push(s.Solicitud(fila[0],  # rfc
+                        self.solicitudes.push(So.Solicitud(fila[0],  # rfc
                                               fila[1],  # nombre_tienda
                                               int(fila[2]),  # cantidad_solicitada
                                               fila[3]))  # nombre_consola
@@ -174,8 +174,13 @@ class Almacen:
                     cadena = ''
                     for atributo in solicitud:
                         cadena += str(atributo) + ','
-                    cadena = cadena[:-1] + '\n'  # Eliminamos la ultima coma y aniadimos salto de linea
-                    f.write(cadena)
+                    cadena = cadena[:-1]   # Eliminamos la ultima coma y aniadimos salto de linea
+
+                    # Agregamos un salto de línea al inicio si no es la primera solicitud escrita
+                    if f.tell() > 0:  # Si no estamos al inicio, aniadir una nueva línea antes
+                        cadena = '\n' + cadena
+
+                    f.write(cadena)  # Escribir la solicitud
 
         print(f'Se ha guardado la nueva informacion en el archivo "{nombre}"\n')
 
@@ -199,19 +204,41 @@ class Almacen:
     def registrar_solicitud(self, solicitud):
         # Verificar existencias en la cola
         existencias = self.consulta_existencias(nombre=solicitud.nombre_consola)
-        if existencias >= solicitud.cantidad_solicitada:
+        if existencias >= solicitud.cantidad_solicitada:  # tengo suficientes
             # Proceso de venta
             precio_total = 0
-            # Retirar consolas de la cola
-            for _ in range(solicitud.cantidad_solicitada):
-                a = self.banda_magnetica.desencolar()
-                precio_total += a.precio
+            contador = 0
+            cola_auxiliar = cC.Cola()
+            while contador < solicitud.cantidad_solicitada:
+                # Retirar consolas de la cola
+                consola_a = self.banda_magnetica.desencolar()
+                if consola_a.nombre == solicitud.nombre_consola:
+                    precio_total += consola_a.precio
+                    contador += 1
+                else:
+                    cola_auxiliar.encolar(consola_a)
+            # salgo del while cuando ya complete el pedido
+            if not self.banda_magnetica.esta_vacio():
+                for i in range(self.banda_magnetica.tamanio()):
+                    a = self.banda_magnetica.desencolar()
+                    cola_auxiliar.encolar(a)
+
+                for i in range(cola_auxiliar.tamanio()):
+                    b = cola_auxiliar.desencolar()
+                    self.banda_magnetica.encolar(b)
+
+            else:  # en caso de que me tomo vaciar la banda magnetica
+                #  significa que ya tengo todos en la cola auxiliar
+                for i in range(cola_auxiliar.tamanio()):
+                    b = cola_auxiliar.desencolar()
+                    self.banda_magnetica.encolar(b)
 
             print(f"Venta realizada para {solicitud.nombre_tienda}:")
+            print(f"RFC {solicitud.rfc}")
             print(f"Consola: {solicitud.nombre_consola}, Cantidad: {solicitud.cantidad_solicitada}, "
                   f"Total a pagar: {precio_total}")
 
             # Apilar solicitud solo si hay existencias
             self.solicitudes.push(solicitud)
         else:
-            print("No hay suficientes existencias para completar la solicitud.")
+            print("No hay suficientes existencias para completar la solicitud.\n")

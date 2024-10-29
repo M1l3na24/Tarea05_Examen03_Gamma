@@ -3,12 +3,12 @@
 # Autores: Milena Rivera, Carlos Barrera, Isaac Garrido, Mayela Rosas
 # Version: 28-10-2024
 
-import Almacen as A
-import Solicitud as T
+import Almacen as Al
+import Solicitud as So
 import Consola_Videojuegos as cV
 import XboxSerieS as xS
 import XboxSerieX as xX
-import PlayStation5 as p5
+import PlayStation5 as pS
 
 
 def crear_consola() -> cV.Consolavideojuegos:
@@ -31,14 +31,14 @@ def crear_consola() -> cV.Consolavideojuegos:
             print(f'{consola} almacenada correctamente. \n')
             return consola
         elif nombre == 'PlayStation5':
-            consola = p5.PlayStation5(codigo, emp_fabricante, precio)
+            consola = pS.PlayStation5(codigo, emp_fabricante, precio)
             print(f'{consola} almacenada correctamente. \n')
             return consola
         else:
             raise ValueError('Los datos no son validos.')
 
 
-def crear_solicitud() -> T.Solicitud:
+def crear_solicitud() -> So.Solicitud:
     """
     Metodo para solicitar los datos y crear una solicitud (tienda).
     :return: Un objeto Libro
@@ -55,7 +55,7 @@ def crear_solicitud() -> T.Solicitud:
         nombre_consola = input("Escribe el nombre de la consola (XboxSeriesS, XboxSeriesX, PlayStation5): ")
         if nombre_consola in ['XboxSeriesS', 'XboxSeriesX', 'PlayStation5']:
             # Creamos tienda
-            tienda = T.Solicitud(rfc, nombre_tienda, cantidad_solicitada, nombre_consola)
+            tienda = So.Solicitud(rfc, nombre_tienda, cantidad_solicitada, nombre_consola)
             if isinstance(rfc, str) and isinstance(nombre_tienda, str) and isinstance(cantidad_solicitada, int):
                 return tienda
         else:
@@ -99,7 +99,10 @@ while True:
         continue
     match accion:
         case "1":  # Crear mi almacen
-            almacen = A.Almacen()
+            # Asumimos que el almacen cuenta con un historial de ventas anteriores
+            # y se respetaran
+            print('NOTA IMPORTANTE: Se cargaran solicitudes anteriores.\n')
+            almacen = Al.Almacen()
             almacen.leer_archivo_consolas('consolas.csv')
             almacen.leer_archivo_consolas('tiendas.csv')
             print("Se ha creado el almacen con los datos previos. \n")
