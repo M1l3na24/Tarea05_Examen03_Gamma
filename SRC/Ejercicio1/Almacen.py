@@ -157,22 +157,27 @@ class Almacen:
 
     def escritura_solicitudes(self):
         """
-        Metodo que guarda la informacion de las solicitudes existentes en un archivo csv,
-        para ello se utilizara los iteradores de la Cola.
+        Metodo que guarda la informacion de las nuevas solicitudes en un archivo csv,
+        agregando los datos sin borrar la informacion existente.
         """
         nombre = 'tiendas.csv'
-        f = open(nombre, 'w')
-        encabezado = 'rfc,nombre_tienda,cantidad_solicitada,nombre_consola\n'
-        f.write(encabezado)
-        for solicitud in self.solicitudes:
-            if solicitud is not None:
-                cadena = ''
-                for atributo in solicitud:
-                    cadena += str(atributo) + ','
-                cadena = cadena[:-1] + '\n'
-                f.write(cadena)
-        f.close()
-        print(f'Se ha guardado la informacion en el archivo "{nombre}"\n')
+        # modo 'a' (append) para agregar informacion sin borrar el contenido existente
+        with open(nombre, 'a') as f:
+            # Verificar si el archivo esta vacio
+            if f.tell() == 0:
+                encabezado = 'rfc,nombre_tienda,cantidad_solicitada,nombre_consola\n'
+                f.write(encabezado)
+
+            # Iteramos sobre las solicitudes para escribir cada una en una linea
+            for solicitud in self.solicitudes:
+                if solicitud is not None:
+                    cadena = ''
+                    for atributo in solicitud:
+                        cadena += str(atributo) + ','
+                    cadena = cadena[:-1] + '\n'  # Eliminamos la ultima coma y aniadimos salto de linea
+                    f.write(cadena)
+
+        print(f'Se ha guardado la nueva informacion en el archivo "{nombre}"\n')
 
     def consulta_existencias(self, codigo=None, nombre=None, empresa_fabricante=None):
         """
@@ -186,7 +191,7 @@ class Almacen:
         aux = 0
         for consola in self.banda_magnetica:
             if ((codigo and consola.codigo == codigo) or (nombre and consola.nombre == nombre) or (
-                    empresa_fabricante and consola.emp_fabricante == empresa_fabricante)):
+                    empresa_fabricante and consola.fabricante == empresa_fabricante)):
                 aux += 1
         print(f"Existencias encontradas: {aux}")
         return aux

@@ -47,9 +47,13 @@ def crear_solicitud() -> T.Solicitud:
         # rfc: str, nombre_tienda: str, cantidad_solicitada: int, nombre_consola: str
         rfc = input("Escribe el RFC: ")
         nombre_tienda = input("Escribe el nombre de la tienda: ")
-        cantidad_solicitada = int(input("Escribe la catidad solicitada: "))
+        try:
+            cantidad_solicitada = int(input("Escribe la cantidad solicitada: "))
+        except ValueError:
+            print('La cantidad debe ser un entero.')
+            continue
         nombre_consola = input("Escribe el nombre de la consola (XboxSeriesS, XboxSeriesX, PlayStation5): ")
-        if nombre_tienda in ['XboxSeriesS', 'XboxSeriesX', 'PlayStation5']:
+        if nombre_consola in ['XboxSeriesS', 'XboxSeriesX', 'PlayStation5']:
             # Creamos tienda
             tienda = T.Solicitud(rfc, nombre_tienda, cantidad_solicitada, nombre_consola)
             if isinstance(rfc, str) and isinstance(nombre_tienda, str) and isinstance(cantidad_solicitada, int):
@@ -109,7 +113,11 @@ while True:
                 existencias = 0
                 if respuesta == '1':
                     codigo = input('Ingresa el codigo a consultar:')
-                    existencias = almacen.consulta_existencias(codigo=int(codigo))
+                    try:
+                        existencias = almacen.consulta_existencias(codigo=int(codigo))
+                    except ValueError:
+                        print('El codigo debe ser un entero \n')
+                        continue
                 elif respuesta == '2':
                     nombre = input('Ingresa el nombre a consultar (XboxSeriesS, XboxSeriesX, PlayStation5):')
                     if nombre not in ['XboxSeriesS', 'XboxSeriesX', 'PlayStation5']:
@@ -119,7 +127,7 @@ while True:
                 elif respuesta == '3':
                     empresa = input('Ingresa la empresa a consultar:')
                     existencias = almacen.consulta_existencias(empresa_fabricante=empresa)
-                print(f'Hay {existencias} consolas de ese tipo en existencia')
+                print(f'Hay {existencias} consolas de ese tipo en existencia \n')
 
         case "3":  # Almacenar una nueva consola de videojuegos
             if almacen is None:
