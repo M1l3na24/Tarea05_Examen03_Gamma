@@ -3,32 +3,44 @@
 # Autores: Milena Rivera, Carlos Barrera, Isaac Garrido, Mayela Rosas
 # Version: 28-10-2024
 
-import Repisa_Pila as Rp
-import Estante as Es
-import Clase_Libro as Cl
-import Comparadores_Libros as Cdl
+import Almacen as A
+import Tienda as T
+import Consola_Videojuegos as cV
+import XboxSerieS as xS
+import XboxSerieX as xX
+import PlayStation5 as p5
+import Clase_Cola as cC
+import Clase_Pila as cP
 import csv
 
 
-def leer_archivo(archivo: str) -> Rp.RepisaPila:
+def leer_archivo_consolas(archivo: str):
     """
-    Metodo para leer un archivo y construir una repisa con dichos datos
+    Metodo para leer un archivo y construir banda magnetica.
     :param archivo: El nombre del archivo que se va a leer
-    :return: Una Repisa con los datos leidos
+    :return: Una Cola (Banda magnetica)
     """
-    repisa = None
+    cola = None
     existe = False  # El archivo no existe
     while not existe:
         try:
-            repisa = Rp.RepisaPila()  # Creamos una repisa vacia
+            cola = cC.Cola()  # Creamos una cola vacia
             with open(archivo, encoding="UTF8", newline="") as file:
                 lector = csv.reader(file)
                 lector.__next__()  # Salta la primera linea
                 for fila in lector:
-                    repisa.push(Cl.Libro(fila[0],  # Titulo
-                                         fila[1],  # Autor
-                                         fila[2],  # Editorial
-                                         int(fila[3])))  # Anio de publicacion
+                    if fila[1] == "XboxSeriesX":
+                        cola.encolar(xX.XboxSerieX(int(fila[0]),  # codigo
+                                                   fila[2],  # emp_fabricante
+                                                   int(fila[3])))  # precio
+                    elif fila[1] == "XboxSeriesS":
+                        cola.encolar(xS.XboxSerieS(int(fila[0]),  # codigo
+                                                   fila[2],  # emp_fabricante
+                                                   int(fila[3])))  # precio
+                    elif fila[1] == "PlayStation5":
+                        cola.encolar(p5.PlayStation5(int(fila[0]),  # codigo
+                                                     fila[2],  # emp_fabricante
+                                                     int(fila[3])))  # precio
                 existe = True
                 print(f"El archivo {archivo} se leyo exitosamente!\n")
         except FileNotFoundError:
@@ -37,10 +49,62 @@ def leer_archivo(archivo: str) -> Rp.RepisaPila:
         except OSError:
             print("No es una entrada valida\n")
             break
-    return repisa
+    return cola
 
+def leer_archivo_tiendas(archivo: str):
+    """
+    Metodo para leer un archivo y construir una pila de solicitudes.
+    :param archivo: El nombre del archivo que se va a leer
+    :return: Una Pila (solicitudes)
+    """
+    pila = None
+    existe = False  # El archivo no existe
+    while not existe:
+        try:
+            pila = cP.Pila() # Creamos una pila vacia
+            with open(archivo, encoding="UTF8", newline="") as file:
+                lector = csv.reader(file)
+                lector.__next__()  # Salta la primera linea
+                for fila in lector:
+                    pila.push(T.Tienda(fila[0],  # rfc
+                                       fila[1],  # nombre_tienda
+                                       int(fila[2]),  # cantidad_solicitada
+                                       fila[3]))  # nombre_consola
+                existe = True
+                print(f"El archivo {archivo} se leyo exitosamente!\n")
+        except FileNotFoundError:
+            print("El archivo no existe!\n")
+            archivo = input("Escribe el nombre del archivo CSV: ")
+        except OSError:
+            print("No es una entrada valida\n")
+            break
+    return pila
 
-def escritura_csvs(l: Es.Estante):
+def escritura_consolas(l: Es.Estante):
+    """
+    Metodo que guarda la informacion de las consolas existentes.
+    de un estante de libros ordenados en un archivo csv,
+    para ello se utilizara los iteradores de la lista.
+    :param l: El estante de libros ordenados de la lista
+    """
+    if isinstance(l, Es.Estante):
+        nombre = 'Libros_Ordenados.csv'
+        f = open(nombre, 'w')
+        encabezado = 'Titulo,Autor,Editorial,Anio\n'
+        f.write(encabezado)
+        for libro in l.repisa3:
+            if libro is not None:
+                cadena = ''
+                for atributo in libro:
+                    cadena += str(atributo) + ','
+                cadena = cadena[:-1] + '\n'
+                f.write(cadena)
+        f.close()
+        print(f'Se ha guardado la informacion en el archivo "{nombre}"\n')
+    else:
+        raise TypeError("El argumento debe ser un objeto RespisaLista")
+
+def escritura_tiendas(l: Es.Estante):
     """
     Metodo que guarda la información de la tercer repisa (la ordenada)
     de un estante de libros ordenados en un archivo csv,
@@ -63,7 +127,6 @@ def escritura_csvs(l: Es.Estante):
         print(f'Se ha guardado la informacion en el archivo "{nombre}"\n')
     else:
         raise TypeError("El argumento debe ser un objeto RespisaLista")
-
 
 def crear_libro() -> Cl.Libro:
     """
