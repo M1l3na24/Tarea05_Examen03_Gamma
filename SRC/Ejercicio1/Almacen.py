@@ -211,7 +211,7 @@ class Almacen:
         existencias = self.consulta_existencias(nombre=solicitud.nombre_consola)
         if existencias >= solicitud.cantidad_solicitada:  # tengo suficientes
             # Proceso de venta
-            precio_total = 0
+            precio_total = 0  # NOTA: En esta simulacion las consolas varian en precio aunque sean del mismo tipo
             contador = 0
             cola_auxiliar = cC.Cola()
             while contador < solicitud.cantidad_solicitada:
